@@ -1,0 +1,13 @@
+env/
+media/
+static/
+*.sqlite3
+dump.rdb
+*.pyc
+*.log
+*.zip
+.coverage
+reports
+.idea/
+diff.txt
+
