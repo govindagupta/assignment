@@ -23,18 +23,22 @@ class InboundSMS(View):
 
             #everything good, process the message
             ret['message'] = 'inbound sms ok'
+            status_code = 200
 
         except ValidationError as e:
             print("ValidationError", e.message)
             ret['error'] = e.message
+            status_code = 400
         except PhoneNumber.DoesNotExist:
             print('to number not exist')
             ret['error'] = 'to number not exist'
+            status_code = 400
         except:
             print ('unknown failure')
             ret['error'] = 'unknown failure'
+            status_code = 500
 
-        return JsonResponse(ret)
+        return JsonResponse(data = ret, status=status_code)
 
 
 class OutboundSMS(View):
@@ -55,15 +59,19 @@ class OutboundSMS(View):
 
             #everything good, process the message
             ret['message'] = 'inbound sms ok'
+            status_code = 200
 
         except ValidationError as e:
             print("ValidationError", e.message)
             ret['error'] = e.message
+            status_code = 400
         except PhoneNumber.DoesNotExist:
-            print('to number not exist')
-            ret['error'] = 'to number not exist'
+            print('from number not exist')
+            ret['error'] = 'from number not exist'
+            status_code = 400
         except:
             print ('unknown failure')
             ret['error'] = 'unknown failure'
+            status_code = 500
 
-        return JsonResponse(ret)
+        return JsonResponse(data=ret, status=status_code)
