@@ -1,12 +1,16 @@
 from django.core.exceptions import ValidationError
 from django.views.generic.base import View
 from django.http import JsonResponse
+from django.contrib.auth import authenticate
 from .models import PhoneNumber
 import json
 from .service import do_input_validation
+from .decorators import basicauth
+
 
 class InboundSMS(View):
 
+    @basicauth
     def post(self, request):
 
         ret = {'message': '', 'error': ''}
@@ -18,8 +22,12 @@ class InboundSMS(View):
 
             do_input_validation(data, json_input_rules)
 
-            # TODO -  Authentication against account
-            PhoneNumber.objects.get(number=data['to'])
+            #Authenticate for 'to' number in account
+            queryset = PhoneNumber.objects.filter(number=data['to']).filter(account_id=request.user.first_name)
+            #print([p.id for p in queryset])
+
+            if queryset.count() == 0:
+                raise PhoneNumber.DoesNotExist("Phone number not there or account mismatch")
 
             #everything good, process the message
             ret['message'] = 'inbound sms ok'
@@ -43,6 +51,7 @@ class InboundSMS(View):
 
 class OutboundSMS(View):
 
+    @basicauth
     def post(self, request):
 
         ret = {'message': '', 'error': ''}
@@ -54,8 +63,12 @@ class OutboundSMS(View):
 
             do_input_validation(data, json_input_rules)
 
-            #TODO -  Authentication against account
-            PhoneNumber.objects.get(number=data['from'])
+            #Authenticate for 'from' number in account
+            queryset = PhoneNumber.objects.filter(number=data['from']).filter(account_id=request.user.first_name)
+            #print([p.id for p in queryset])
+
+            if queryset.count() == 0:
+                raise PhoneNumber.DoesNotExist("Phone number not there or account mismatch")
 
             #everything good, process the message
             ret['message'] = 'inbound sms ok'

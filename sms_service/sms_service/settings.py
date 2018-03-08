@@ -50,6 +50,7 @@ MIDDLEWARE = [
 ]
 # 'django.middleware.csrf.CsrfViewMiddleware',
 
+AUTHENTICATION_BACKENDS = ['mainapp.backends.AccountsBackend']
 
 ROOT_URLCONF = 'sms_service.urls'
 
