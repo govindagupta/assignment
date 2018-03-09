@@ -6,7 +6,7 @@ from .models import PhoneNumber
 import json
 from .service import do_input_validation
 from .decorators import basicauth
-
+from .utils import set_cache,get_cache, get_unique_key, expire_cache
 
 class InboundSMS(View):
 
@@ -28,6 +28,12 @@ class InboundSMS(View):
 
             if queryset.count() == 0:
                 raise PhoneNumber.DoesNotExist("Phone number not there or account mismatch")
+
+            #Recieved STOP, cache it
+            if data['text'].strip() == "STOP":
+                unique_key = get_unique_key(data['from'], data['to'])
+                set_cache(unique_key, True)
+                expire_cache(unique_key, 4*3600)
 
             #everything good, process the message
             ret['message'] = 'inbound sms ok'
@@ -70,8 +76,14 @@ class OutboundSMS(View):
             if queryset.count() == 0:
                 raise PhoneNumber.DoesNotExist("Phone number not there or account mismatch")
 
+            #check if to, from has been stopped before
+            unique_key = get_unique_key(data['to'], data['from'])
+            if get_cache(unique_key):
+                err_msg = 'sms from %s to %s blocked by STOP request' % (data['from'], data['to'])
+                raise ValidationError(err_msg)
+
             #everything good, process the message
-            ret['message'] = 'inbound sms ok'
+            ret['message'] = 'outbound sms ok'
             status_code = 200
 
         except ValidationError as e:

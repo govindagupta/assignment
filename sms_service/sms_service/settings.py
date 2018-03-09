@@ -52,6 +52,10 @@ MIDDLEWARE = [
 
 AUTHENTICATION_BACKENDS = ['mainapp.backends.AccountsBackend']
 
+REDIS_HOST = 'localhost'
+REDIS_PORT = '6379'
+REDIS_DB = '0'
+
 ROOT_URLCONF = 'sms_service.urls'
 
 TEMPLATES = [
