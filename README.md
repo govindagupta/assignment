@@ -16,7 +16,7 @@
 - pip install redis
 - cd sms_service/
 
-####Add DB Details in settings.py
+### Add DB Details in settings.py
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -27,7 +27,7 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-####Add Redis Server Details in settings.py
+### Add Redis Server Details in settings.py
 REDIS_HOST = 'localhost'
 REDIS_PORT = '6379'
 REDIS_DB = '0'
