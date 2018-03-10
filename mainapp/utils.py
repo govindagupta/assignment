@@ -2,7 +2,8 @@ import redis
 import pickle
 from django.conf import settings
 
-r = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB)
+r = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS_PORT,
+                      db=settings.REDIS_DB, password=settings.REDIS_PASSWORD)
 
 
 def get_unique_key(from_num, to_num):
