@@ -25,7 +25,7 @@ SECRET_KEY = 'eopfk9^2irz&3v+^k&)j@l2pb8#4a21e*bbo_xxa5gsc0@6c1e'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'govinda-plivo-assignment.herokuapp.com']
 
 
 # Application definition
